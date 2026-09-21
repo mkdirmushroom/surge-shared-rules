@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/blackmatrix7/ios_rule_script",
+  "revision": "cad7fe757016e20b7757be5ad9dd953eed9913d5",
+  "path": "rule/Surge/China/China_Domain.list",
+  "sha256": "28817e4a59359c6e6c264b6ed7d05dfc376548afb0aab50dbec5f60eb79e413f",
+  "license": "GPL-2.0",
+  "ai_sources": [
+    "Existing curated domain rules",
+    "blackmatrix7 OpenAI and Gemini domain entries"
+  ],
+  "review_only_reference": "https://github.com/SukkaW/Surge"
+}
