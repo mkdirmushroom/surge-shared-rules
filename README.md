@@ -14,14 +14,16 @@
 
 ```ini
 [Rule]
-RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/model-downloads.list,模型下载,no-resolve,update-interval=86400
-RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/ai-services.list,AI,no-resolve,update-interval=86400
-RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/china-direct.list,DIRECT,no-resolve,update-interval=86400
+RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/model-downloads.list,模型下载,no-resolve,extended-matching,update-interval=86400
+RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/ai-services.list,AI,no-resolve,extended-matching,update-interval=86400
+RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/china-direct.list,DIRECT,no-resolve,extended-matching,update-interval=86400
 
 [Host]
 RULE-SET:https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/ai-services.list = server:https://1.1.1.1/dns-query
 RULE-SET:https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/china-direct.list = server:https://dns.alidns.com/dns-query
 ```
+
+`extended-matching` 使域名规则同时匹配 Surge 已识别的 TLS SNI / HTTP Host，适用于连接目标是 IP 但仍带域名信息的请求。没有 SNI/Host 的裸 IP 请求仍依赖 IP 或明确的本地例外；不要因此放开整个云厂商 ASN。
 
 DNS 映射和路由引用同一个 URL。本机 DNS 映射不强制 Snell 代理请求改为本地解析；域名代理默认仍在出口端解析。`[Host]` 规则集映射在 Mac 5.10+ 支持；手机端需按实际 Surge 版本验证。使用普通外部规则，不依赖 Mac 6.9 的嵌套规则集。
 
