@@ -13,3 +13,4 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/build.py --check
+      - run: python scripts/check-routing.py

@@ -55,3 +55,8 @@ ts.net
 parsec.app
 parsecgaming.com
 parsecusercontent.com
+
+# Regional domains belonging to explicitly protected overseas service families.
+google.cn
+microsoft.cn
+microsoft.com.cn
