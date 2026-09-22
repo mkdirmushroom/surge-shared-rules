@@ -50,7 +50,7 @@ def matches(name, domain):
     return any(domain == v or (k == 'DOMAIN-SUFFIX' and domain.endswith('.'+v)) for k,v in (x.split(',') for x in outputs[name]))
 for domain in ['chatgpt.com', 'api.openai.com', 'claude.ai', 'gemini.google.com', 'copilot.microsoft.com', 'api.x.ai', 'api.cursor.com']:
     assert matches('ai-services', domain), domain
-for domain in ['qq.com', 'baidu.com', 'qpic.cn', 'qlogo.cn', 'sinaimg.cn', 'wps.cn', 'kdocs.cn', '12306.cn', 'volcengine.com', 'miinsurtech.com', 'jpush.cn', '189.cn', 'mijia.tech']:
+for domain in ['qq.com', 'baidu.com', 'qpic.cn', 'qlogo.cn', 'sinaimg.cn', 'wps.cn', 'kdocs.cn', '12306.cn', 'volcengine.com', 'miinsurtech.com', 'jpush.cn', '189.cn', 'mijia.tech', 'wifi.vivo.com.cn']:
     assert matches('china-direct', domain), domain
 for domain in ['chatgpt.com', 'copilot.microsoft.com', 'foreign.microsoft.example', 'example.sora.example']:
     assert not matches('china-direct', domain), domain

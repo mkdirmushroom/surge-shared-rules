@@ -9,3 +9,6 @@ DOMAIN-SUFFIX,volcengine.com
 # Additional domestic service domains.
 DOMAIN-SUFFIX,jpush.cn
 DOMAIN-SUFFIX,189.cn
+
+# Domestic connectivity check also used by Ponte latency tests.
+DOMAIN,wifi.vivo.com.cn
