@@ -5,3 +5,7 @@ DOMAIN-SUFFIX,wps.cn
 DOMAIN-SUFFIX,kdocs.cn
 DOMAIN-SUFFIX,12306.cn
 DOMAIN-SUFFIX,volcengine.com
+
+# Additional domestic service domains.
+DOMAIN-SUFFIX,jpush.cn
+DOMAIN-SUFFIX,189.cn

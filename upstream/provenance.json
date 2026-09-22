@@ -8,5 +8,12 @@
     "Existing curated domain rules",
     "blackmatrix7 OpenAI and Gemini domain entries"
   ],
-  "review_only_reference": "https://github.com/SukkaW/Surge"
+  "review_only_reference": "https://github.com/SukkaW/Surge",
+  "expansion": {
+    "repository": "https://github.com/blackmatrix7/ios_rule_script",
+    "revision": "51d2e1dd8429a91be575157d6f8ed051c93559f8",
+    "path": "rule/Surge/ChinaMax/ChinaMax_All.list",
+    "sha256": "e33fc9f858811b49228d37e2b129b1f2a318b1e8d0d8fc28d8dd0be01af089c8",
+    "license": "GPL-2.0"
+  }
 }

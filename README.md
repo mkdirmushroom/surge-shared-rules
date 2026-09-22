@@ -5,7 +5,7 @@
 | 文件 | 内容 |
 | --- | --- |
 | `rules/ai-services.list` | AI 服务及现有登录、支付、共享 CDN 依赖；部分依赖也服务非 AI 网站 |
-| `rules/china-direct.list` | 国内纯域名名单及人工补充，不含关键词、IP、ASN 或进程规则 |
+| `rules/china-direct.list` | China + ChinaMax 的具体域名及人工补充，不含顶级域名、关键词、IP、ASN 或进程规则 |
 | `rules/model-downloads.list` | 模型下载站域名；不把整个共享云存储归为下载 |
 
 ## 引用
@@ -34,7 +34,7 @@ Parsec 的点对点 UDP、内网、Apple/iCloud 例外属于本地策略，不�
 1. 日常补充修改 `source/*.list`；运行 `python3 scripts/build.py`，检查生成 diff。
 2. 运行 `python3 scripts/build.py --check`；确认没有私人域名、IP、节点、订阅或凭据，再提交。
 3. 推送后，各设备按 Surge 外部资源更新周期获取；不是立即远程重载。
-4. 上游国内名单使用已审核快照。升级时从明确的上游 commit 获取 `China_Domain.list`，更新 `upstream/provenance.json` 的 revision/hash，重新生成并审核 diff。不会无人审核地把上游变化直接发布。
+4. 上游国内名单使用已审核快照。升级时从明确的上游 commit 获取 `China_Domain.list` / `ChinaMax_All.list`，更新 `upstream/provenance.json` 的 revision/hash，重新生成并审核 diff。构建只提取具体 DOMAIN / DOMAIN-SUFFIX，丢弃整个顶级域名及其他规则类型。不会无人审核地把上游变化直接发布。
 5. 回滚使用 Git revert；也可把本地 URL 的 `main` 改为审核过的 commit SHA，固定版本。
 
 远程资源首次获取必须成功。GitHub 不可达时更新可能失败；缓存行为应以设备实际状态为准。首次迁移前应下载验证并保留完整本地备份。国内名单可能遗漏或错分，未知域名应由设备的代理兜底处理。
@@ -46,3 +46,13 @@ Parsec 的点对点 UDP、内网、Apple/iCloud 例外属于本地策略，不�
 - [Surge RULE-SET](https://manual.nssurge.com/rules/ruleset.html) 与 [DNS 映射](https://manual.nssurge.com/dns/local-dns-mapping.html)：语法与优先级依据。
 
 本仓库按随附 GPL-2.0 许可发布。仅维护公开域名事实和规则；不接受完整用户配置、账户数据或日志。
+
+## Priority and coverage safeguards
+
+国内扩展采用 blackmatrix7 ChinaMax 已固定版本的域名部分，并保留原 China 名单补充。ChinaMax 上游标记为实验性；本仓库不直接启用其整包规则。`scripts/build.py` 排除与 AI、模型下载及 `source/china-exclusions.list` 海外服务族相交的域名规则（包括会覆盖这些域名的父级后缀），同时验证典型国内服务和海外边界。名单仍无法保证覆盖所有国内站点或识别所有上游误分类。
+
+设备端顺序：既有必要的基础连接/明确覆盖规则 → AI 应用进程 → 模型下载和 AI 域名 → 其他服务/公司/内网/Apple 等明确规则 → 已知海外规则 → 国内名单 → LAN / GEOIP no-resolve → FINAL 兜底。进程例外与 Apple/iCloud 直连仍按设备原有用途保留。模型下载独立出口只适用于未被 AI 应用进程规则提前选中的连接。
+
+`GEOIP,CN,DIRECT,no-resolve` 不主动解析未知域名，避免为了分流而增加海外 DNS 等待；未知域名仍代理兜底。国内 DNS 与路由使用同一份过滤后名单，不能只在 DNS 中添加域名就假定它会直连。不使用整个 `.cn` / `.ms` 顶级域名来扩大直连。
+
+GitHub 只分发域名数据，**不会同步策略组、FINAL 或设备配置**。各设备统一定义「兜底」并使用 `FINAL,兜底,dns-failed`；设备配置修改后由使用者手动重载。远程规则数据则会按既有资源更新周期获取，可能在不重载整份配置时生效。
