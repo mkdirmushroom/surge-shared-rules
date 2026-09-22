@@ -36,6 +36,7 @@ china = [l for l in china + expanded + lines(ROOT/'source/china-additions.list')
 outputs = {
     'ai-services': lines(ROOT/'source/ai-services.list'),
     'model-downloads': lines(ROOT/'source/model-downloads.list'),
+    'windows-downloads': lines(ROOT/'source/windows-downloads.list'),
     'china-direct': china,  # Compatibility list for profiles loaded before v2.
     'china-direct-v2': china + ['DOMAIN-SUFFIX,cn'],
     'overseas-services': ['DOMAIN-SUFFIX,'+d for d in lines(ROOT/'source/china-exclusions.list')],
@@ -68,4 +69,10 @@ for domain in ['chatgpt.com', 'claude.ai', 'github.com', 'outlook.com', 'unknown
     assert not matches('china-direct-v2', domain), domain
 for domain in ['github.com', 'outlook.com', 'login.microsoftonline.com']:
     assert matches('overseas-services', domain), domain
+for domain in ['skydrive.wns.windows.com', 'client.wns.windows.com', 'ctldl.windowsupdate.com']:
+    assert not matches('china-direct-v2', domain), domain
+for domain in ['download.windowsupdate.com', 'ctldl.windowsupdate.com', 'tlu.dl.delivery.mp.microsoft.com']:
+    assert matches('windows-downloads', domain), domain
+for domain in ['login.live.com', 'skydrive.wns.windows.com', 'copilot.microsoft.com', 'fe3.delivery.mp.microsoft.com']:
+    assert not matches('windows-downloads', domain), domain
 print('Format, provenance, generated-file and routing-boundary checks passed.')

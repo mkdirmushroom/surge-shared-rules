@@ -60,3 +60,7 @@ parsecusercontent.com
 google.cn
 microsoft.cn
 microsoft.com.cn
+
+# Windows service families; narrowly scoped update downloads have a separate exception.
+windows.com
+windowsupdate.com

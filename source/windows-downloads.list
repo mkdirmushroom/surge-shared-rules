@@ -1,0 +1,5 @@
+# Reviewed download/certificate-update endpoints only. No login, WNS or whole Microsoft family.
+# https://learn.microsoft.com/en-us/windows/privacy/manage-windows-11-endpoints
+DOMAIN,ctldl.windowsupdate.com
+DOMAIN-SUFFIX,download.windowsupdate.com
+DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com

@@ -8,6 +8,7 @@
 | `rules/china-direct-v2.list` | China + ChinaMax 的具体域名、人工补充和 `.cn` 基线；须与前置海外例外配对 |
 | `rules/overseas-services.list` | 明确的海外服务族，优先于国内名单用于路由和 DNS |
 | `rules/china-direct.list` | 兼容旧配置的具体域名版本，不增加 `.cn`，避免未迁移设备提前扩大直连 |
+| `rules/windows-downloads.list` | 明确的 Windows 更新下载与证书信任列表端点；独立直连例外，不代表国内服务 |
 | `rules/model-downloads.list` | 模型下载站域名；不把整个共享云存储归为下载 |
 
 ## 引用
@@ -18,11 +19,13 @@
 [Rule]
 RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/model-downloads.list,模型下载,no-resolve,extended-matching,update-interval=3600
 RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/ai-services.list,AI,no-resolve,extended-matching,update-interval=3600
+RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/windows-downloads.list,DIRECT,no-resolve,extended-matching,update-interval=3600
 RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/overseas-services.list,兜底,no-resolve,extended-matching,update-interval=3600
 RULE-SET,https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/china-direct-v2.list,DIRECT,no-resolve,extended-matching,update-interval=3600
 
 [Host]
 RULE-SET:https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/ai-services.list = server:https://1.1.1.1/dns-query
+RULE-SET:https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/windows-downloads.list = server:https://dns.alidns.com/dns-query
 RULE-SET:https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/overseas-services.list = server:https://1.1.1.1/dns-query
 RULE-SET:https://raw.githubusercontent.com/mkdirmushroom/surge-shared-rules/main/rules/china-direct-v2.list = server:https://dns.alidns.com/dns-query
 ```
@@ -66,3 +69,10 @@ GitHub 只分发域名数据，**不会同步策略组、FINAL 或设备配置**
 先在 `[Rule]` 和 `[Host]` 同时加入 `overseas-services.list`，置于国内名单之前，并保持 AI 优先，再将两处国内 URL 切到 `china-direct-v2.list`。校验并手动重载整份配置后，配对顺序才会生效。不能单独替换国内 URL，也不要将 v2 内容发布到旧 URL。共享名单更新后按 `update-interval=3600` 获取；设备配置、策略组与上游快照不会因此自动同步。
 
 公开 CI 检查生成一致性、来源与域名边界，以及路由/DNS 分类样例。设备的进程、平台、内网与策略组回归应在私有配置中另行校验；公共分类测试不替代 Surge 原生校验或实际设备运行验证。
+
+
+## Windows download exception
+
+`windows.com` / `windowsupdate.com` 属于海外服务族，不再由国内名单整族直连。仅 `download.windowsupdate.com`（含子域）、`dl.delivery.mp.microsoft.com`（含子域）和精确的 `ctldl.windowsupdate.com` 使用独立直连及国内 DNS。前两类为更新包/Store 内容下载；最后一个是证书信任列表更新，不是账户服务。用途依据 [Microsoft Windows endpoints](https://learn.microsoft.com/en-us/windows/privacy/manage-windows-11-endpoints)。这项直连策略旨在利用本地 CDN，不能保证所有线路都比代理快。
+
+`windows-downloads` 必须在 AI 规则之后、泛海外/blocked 规则之前；DNS 亦在 AI 映射之后、海外映射之前。账户、WNS 推送、OneDrive、Copilot 及其他更新控制端点保持原有代理分类。不按整个 Microsoft 进程、IP 或 ASN 直连。新的例外 URL 需要修改设备配置并手动重载；旧配置可能暂时将更新下载归到代理兜底，行为保守但速度可能降低。
